@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>外控</title>
+    <meta http-equiv="Content-Type" content="text/html"; charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT" />
+
+    <link href="bootstrap-3.2.0-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="bootstrap-3.2.0-dist/js/jquery-2.0.3.min.js"></script>
+    <script src="bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
+    <script src="js/knockout-2.3.0.js"></script>
+    <script type="text/javascript">
+        var buildlist = localStorage.getItem("buildlist");//取回room对象          
+        var buildlist = JSON.parse(buildlist);//把字符串转换成JSON对象
+        var projectguid = localStorage.getItem("projectguid");
+        var projectname = localStorage.getItem("projectname");
+
+
+        var rownum = localStorage.getItem("rownum");
+        //一行显示几个房间（建议6到10）
+        var roomnumber = 0;
+        var RoomNoList;
+
+        var vm;
+        $(function () {
+
+            var projectnum = localStorage.getItem("projectnum");
+            if (projectnum == 1) {
+                $("#project").attr({ style: "display:none" });
+            }
+            var right = localStorage.getItem("right");
+            if (right < 2) {
+                $("#right").attr({ style: "display:none" });
+            }
+            $("#currentProj").html("当前项目：" + projectname);
+
+
+            vm = new ViewModel();
+            ko.applyBindings(vm, window.document.getElementById("build"));
+
+            localStorage.removeItem("buildlist");
+            buildlist = JSON.stringify(buildlist);
+            localStorage.setItem("buildlist", buildlist);//用localStorage保存转化好的的字符串
+
+
+
+        })
+
+        function ViewModel() {
+            var self = this;
+            self.projects = ko.observableArray();
+
+            for (var i in buildlist.data) {
+                for (var j in buildlist.data[i].build) {
+
+                    if (buildlist.data[i].build[j].url == undefined || buildlist.data[i].build[j].url=="") {
+                        buildlist.data[i].build[j].url = 'choose1_tv.html?buildingID=' + buildlist.data[i].build[j].BldGUID + '&projguid=' + buildlist.data[i].build[j].ProjGUID + '&BldName=' + escape(buildlist.data[i].build[j].BldName);
+
+                        var Units = buildlist.data[i].build[j].Unit;
+                        for (var k in Units) {
+                            roomnumber += parseInt(Units[k].DoorNum);//一层几间房
+                            var strr = Units[k].RoomNoList;
+                            RoomNoList = strr.split(",");
+                            for (var m = 0 ; m < RoomNoList.length; m++) {
+                                if (RoomNoList[m] == "" || typeof (RoomNoList[m]) == "undefined") {
+                                    RoomNoList.splice(m, 1);
+                                    m = m - 1;
+                                }
+                            };
+
+                        }
+                        if (roomnumber > rownum) {
+                            //一层几间房和房间号数组
+
+                            var templist = {};
+                            var length = Math.ceil(roomnumber / rownum);
+
+                            for (var m = 0; m < length; m++) {
+                                var tempbuild = {};
+                                var tempunit = {};
+                                var roomnolist = [];
+
+                                for (var n = 0; n < rownum; n++) {
+
+                                    roomnolist.push(RoomNoList[n + rownum * m]);
+                                }
+                                for (var k in buildlist.data[i].build[j]) {
+                                    tempbuild[k] = buildlist.data[i].build[j][k];
+                                }
+                                tempbuild.BldName = "13-" + (m + 1);
+                                tempbuild.url = 'choose1_tv.html?buildingID=' + buildlist.data[i].build[j].BldGUID + '&projguid=' + buildlist.data[i].build[j].ProjGUID + '&BldName=' + escape(buildlist.data[i].build[j].BldName) + '&rankurl=' + (m + 1);
+
+                                tempbuild.rank = (m + 1);
+                                tempbuild.RoomNoList = roomnolist;
+                                for (var k in tempbuild.Unit) {
+                                    tempbuild.Unit[k].DoorNum = rownum;
+                                }
+                                buildlist.data[i].build.push(tempbuild);
+                            }
+                            buildlist.data[i].build.splice(j, 1);
+
+                        }
+
+                        roomnumber = 0;
+
+                    }
+                }
+            }
+
+            if (buildlist.data[i].projguid == projectguid) {
+                self.projects.push(buildlist.data[i]);
+
+            }
+
+        };
+
+    </script>
+
+</head>
+<body>
+  
+    <nav id="menu" class="navbar navbar-default  navbar-fixed-top" role="navigation" style="height: 71px; font-size: 14px; padding-top: 10px">
+        <div class="navbar-header" style="height: 70px">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target="#example-navbar-collapse">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">时代地产</a>
+        </div>
+        <div class="collapse navbar-collapse" id="example-navbar-collapse" style="height: 70px; font-size: 24px; float: right">
+            <ul class="nav navbar-nav">
+               
+                <li id="right"><a href="right.html">首页</a></li>
+                <li id="project"><a href="premain.html">项目</a></li>
+
+                <li><a href="start.html">退出</a></li>
+                <li><a id="currentProj" style="font-size: 16px"></a></li>
+            </ul>
+        </div>
+        
+    </nav>
+
+    <section   class="content" style="margin-top: 0; margin-left: 0;">
+        <div id="build" data-bind="template: { name: 'projTemplate', foreach: projects, as: 'project' }"></div>
+
+
+        <script type="text/html" id="projTemplate">
+            <div style="width: 100%; text-align: center; float: left">
+                <h1 data-bind="text: projname"></h1>
+                <div data-bind="template: { name: 'buildTemplate', foreach: build, as: 'build' }"></div>
+            </div>
+
+        </script>
+
+
+
+
+        <script type="text/html" id="buildTemplate">
+            <div style="width: 20%; float: left">
+                <a data-bind="attr: { href: url }">
+                    <img src="images/house01.png">      
+                    </img>
+                    <br>
+                    <span data-bind="text: BldName"></span>
+
+                </a>
+
+            </div>
+        </script>
+    </section>
+</body>
+</html>

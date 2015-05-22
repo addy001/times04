@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT" />
+
+    <title>Times Property</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="robots" content="" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" media="all" />
+    <!--[if IE]><link rel="stylesheet" href="css/ie.css" media="all" /><![endif]-->
+    <link href="bootstrap-3.2.0-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="bootstrap-3.2.0-dist/js/jquery-2.0.3.min.js"></script>
+    <script src="bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
+    <script src="js/knockout-2.3.0.js"></script>
+    <script src="js/common.js"></script>
+
+    <script type="text/javascript">
+        var token;
+        var url;
+        $(function () {
+            if (window.localStorage) {
+                //localStorage.removeItem();
+
+
+                localStorage.setItem("url", "http://182.254.197.221/api.php");
+                //localStorage.setItem("url", "http://10.1.10.161/api.php");
+                //localStorage.setItem("url", "http://10.4.39.6/api.php");
+                //localStorage.setItem("url", "http://10.1.19.17/api.php");
+                //url = localStorage.getItem("url");
+                // alert('This browser supports localStorage');
+
+
+
+                localStorage.setItem("rownum", 6);
+                localStorage.setItem("refreshtime", 5000);
+
+
+            } else {
+                alert('This browser does NOT support localStorage');
+            }
+
+         
+        })
+        function loginCheckAjaxFunction() {
+
+
+            //ajax   登陆验证             
+            var account = $("#account").val();
+            var pwd = $("#pwd").val();
+            //url = $("#url").val();
+
+
+
+            //var num = storage.getItem("token");
+            url = localStorage.getItem("url");
+
+            var logindata = { info: { token: token }, func: 'login', params: { usercode: account, password: pwd } };
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: logindata,
+                //data: {//设置数据�?
+                //    loginAccout: $("input[name=loginAccout]").val(),
+                //    loginPwd: $("input[name=loginPwd]").val()
+                //},                
+                dataType: 'jsonp',//设置需要返回的数据类型  
+                jsonpCallback: "callbacksuccess",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
+                success: function (jsons) {                    //alert(jsons.data.user.Token)                
+                    if (jsons.result) {
+                        localStorage.setItem("token", jsons.data.user.Token);
+
+                        location.href = "premain.html";
+                    }
+                    else {
+                        alert(jsons.msg);
+                    }
+                    //登陆成功后的处理
+                },
+                error: function () {
+                    alert("登陆失败，请重试");
+                    //ui.error('登陆失败，请重试', 2000);
+                },
+                timeout: 10000,
+            });
+        }
+
+        function saveparameter() {
+            var rownum = $("#rownum").val();
+            if (rownum < 6 || rownum == "") { rownum = 8 }
+            localStorage.removeItem("rownum");
+            localStorage.setItem("rownum", rownum);
+
+            var url = $("#url").val();
+            if (url != "") {
+                url = "http://" + url + "/api.php";
+                localStorage.removeItem("url");
+                localStorage.setItem("url", url);
+            }
+
+
+
+            var refreshtime = $("#refreshtime").val();
+            if (refreshtime != "") {
+                localStorage.removeItem("refreshtime");
+                localStorage.setItem("refreshtime", refreshtime);
+            }
+            $("#parameter").css("display","none");
+        }
+    </script>
+</head>
+<body class="login">
+
+
+    <section>
+        <h1>时代地产购房系统</h1>
+        <div>
+
+            <!--<input id="url" type="text" placeholder="请输入远程服务器地址"  />-->
+            <input id="account" type="text" placeholder="请输入用户名" />
+            <input id="pwd" type="password" placeholder="请输入密码" />
+            <button class="blue" onclick="loginCheckAjaxFunction()">登录</button>
+            <button class="blue" onclick="javascript:popCenterWindow()">设置</button>
+        </div>
+        <div class="window" id="parameter" style="display: none; margin: 0 auto">
+            <input id="rownum" type="text" placeholder="单行显示房间数6(6-10)" />
+            <input id="url" type="text" placeholder="请输入远程服务器地址" />
+            <input id="refreshtime" type="text" placeholder="请输入刷新时间" />
+            <button class="blue" onclick="saveparameter()">确定</button>
+        </div>
+    </section>
+
+
+
+</body>
+<script type="text/javascript">
+    //获取窗口的高度 
+    var windowHeight;
+    //获取窗口的宽度 
+    var windowWidth;
+    //获取弹窗的宽度 
+    var popWidth;
+    //获取弹窗高度 
+    var popHeight;
+    function init() {
+        windowHeight = $(window).height();
+        windowWidth = $(window).width();
+        popHeight = $(".window").height();
+        popWidth = $(".window").width();
+    }
+    //关闭窗口的方法 
+    function closeWindow() {
+        $("#close").click(function () {
+            $(this).parent().parent().parent().hide("slow");
+        })
+        //$(".title img").click(function () {
+        //    $(this).parent().parent().hide("slow");
+        //});
+    }
+    //定义弹出居中窗口的方法 
+    function popCenterWindow() {
+        init();
+        //计算弹出窗口的左上角Y的偏移量 
+        var popY = (windowHeight - popHeight) / 2;
+        var popX = (windowWidth - popWidth) / 2;
+        //alert('jihua.cnblogs.com'); 
+        //设定窗口的位置 
+        $("#parameter").css("top", popY).css("left", popX).slideToggle("slow");
+        closeWindow();
+    }
+    function popLeftWindow() {
+        init();
+        //计算弹出窗口的左上角Y的偏移量 
+        var popY = windowHeight - popHeight;
+        //var popX=-(windowWidth-popWidth); 
+        //alert(popY); 
+        //设定窗口的位置 
+        $("#left").css("top", popY - 50).css("left", 50).slideToggle("slow");
+        closeWindow();
+    }
+    function popRightWindow() {
+        init();
+        //计算弹出窗口的左上角Y的偏移量 
+        var popY = windowHeight - popHeight;
+        var popX = windowWidth - popWidth;
+        //alert(www.cnblogs.com/jihua); 
+        //设定窗口的位置 
+        $("#right").css("top", popY - 50).css("left", popX - 50).slideToggle("slow");
+        closeWindow();
+    }
+
+</script>
+</html>

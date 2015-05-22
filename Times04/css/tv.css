@@ -1,0 +1,15 @@
+﻿ /*调整外控表宽度和高度，修改span*/
+        #one-roomno, #one-bldarea, #one-tnarea, #one-room {
+
+            width:100px;/*miniwid的值，建议100*/
+            height: 36px;/*建议36px*/
+
+            padding-top: 0px;
+            padding-bottom: 0px;
+            float: left;
+            border: 1px solid #000;
+            text-align: center;
+            border-bottom: none;
+            border-top: none;
+            font-size: 24px;/*建议24px*/
+        }
