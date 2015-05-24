@@ -73,25 +73,41 @@
                             if (roomid == json.data[i].RoomGUID) {
 
                                 if (json.data[i].Status == "预约" || json.data[i].Status == "预留") {
-                                    json.data[i].confirm = "预留转认购"
+                                    json.data[i].confirm = "预留>>认购、销控、待售"
+                                    $("button[name=0]").attr({ style: "display:none" });
+                                    $("button[name=2]").attr({ style: "display:none" });
+                                    $("#7").attr({ style: "display:none" });
                                     choose = 0;
                                 }
                                 else if (json.data[i].Status == "销控") {
-                                    json.data[i].confirm = "销控转待售";
+                                    json.data[i].confirm = "销控>>待售、预留";
+                                    $("button[name=0]").attr({ style: "display:none" });
+                                    $("button[name=1]").attr({ style: "display:none" });
+                                    $("#7").attr({ style: "display:none" });
                                     status = "销控";
                                     choose = 3;
                                 }
                                 else if (json.data[i].Status == "待售") {
-                                    json.data[i].confirm = "待售转销控";
+                                    json.data[i].confirm = "待售>>销控、预留";
+                                    $("button[name=1]").attr({ style: "display:none" });
+                                    $("button[name=2]").attr({ style: "display:none" });
+                                    $("#7").attr({ style: "display:none" });
                                     status = "待售";
                                     choose = 4;
                                 }
                                 else if (json.data[i].Status == "超时") {
-                                    json.data[i].confirm = "手动退房"
+                                    json.data[i].confirm = "手动退房";
+                                    $("button[name=0]").attr({ style: "display:none" });
+                                    $("button[name=1]").attr({ style: "display:none" });
+                                    $("button[name=2]").attr({ style: "display:none" });
                                     choose = 1;
                                 }
                                 else {
                                     json.data[i].confirm = "房间信息";
+                                    $("button[name=0]").attr({ style: "display:none" });
+                                    $("button[name=1]").attr({ style: "display:none" });
+                                    $("button[name=2]").attr({ style: "display:none" });
+                                    $("#7").attr({ style: "display:none" });
                                     choose = 2;
                                 }
                                 self.singleroom.push(json.data[i]);
@@ -118,26 +134,64 @@
             var r = window.location.search.substr(1).match(reg);
             if (r != null) return unescape(r[2]); return null;
         }
-
-        function take() {
-            switch (choose) {
-                case 0:
-                    takecode();//预留 预约 转 认购
+        //待售：0；预留：1；销控：2；认购：3
+        function take(num) {
+            switch (num) {
+                case 01:
+                    turn(dai_z_yu);//待售转预留
                     break;
-                case 1:
+                case 02:
+                    turn(dai_z_xiao);//待售转销控
+                    break;
+                case 10:
+                    turn(yu_z_dai);//预留转待售
+                    break;
+                case 12:
+                    turn(yu_z_xiao);//预留转销控
+                    break;
+                case 13:
+                    takecode();//预留转认购
+                    break;
+                case 20:
+                    turn(xiao_z_dai);//销控转待售
+                    break;
+                case 21:
+                    turn(xiao_z_yu);//销控转预留
+                    break;
+                case 7:
                     outdate();//选房过期未交款
                     break;
-                case 3:
-                    changestatus();//销控待售互转
-                    break;
-                case 4:
-                    changestatus();//销控待售互转
-                    break;
+                    
 
             }
         }
 
-
+        
+        function turn(param) {
+            var testdata = { info: { token: token }, func: param, params: { 'ProjGUID': projguid, 'BldGUID': buildingid, 'RoomGUID': roomid, 'Status': status } };
+            $.ajax({
+                url: url,
+                dataType: 'jsonp',
+                data: testdata,
+                jsonpCallback: "callback",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
+                success: function (json) {
+                    if (json.result) {                     
+                        alert(json.msg);
+                        window.location.href = "javascript:history.back(-1)";                       
+                    }
+                    else {
+                        alert(json.msg);
+                        window.location.href = "javascript:history.back(-1)";
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest.msg);
+                },
+                timeout: 3000,
+            })
+        }
+        
+        
 
         //  二维码//预留 预约 转 认购
         function takecode() {
@@ -219,40 +273,39 @@
         }
 
         //销控待售互转
-        function changestatus() {
-            var testdata = { info: { token: token }, func: 'ChangeStatus', params: { 'ProjGUID': projguid, 'BldGUID': buildingid, 'RoomGUID': roomid, 'Status': status } };
-            $.ajax({
-                url: url,
-                dataType: 'jsonp',
-                data: testdata,
-                jsonpCallback: "callback",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
-                success: function (json) {
-                    if (json.result) {
-                        //alert("房间好：" + Room + "手动退房成功");
-                        alert(json.msg);
-                        window.location.href = "javascript:history.back(-1)";
-                        //window.location.href = "choose1.html";
+        //function changestatus() {
+        //    var testdata = { info: { token: token }, func: 'ChangeStatus', params: { 'ProjGUID': projguid, 'BldGUID': buildingid, 'RoomGUID': roomid, 'Status': status } };
+        //    $.ajax({
+        //        url: url,
+        //        dataType: 'jsonp',
+        //        data: testdata,
+        //        jsonpCallback: "callback",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
+        //        success: function (json) {
+        //            if (json.result) {
+        //                //alert("房间好：" + Room + "手动退房成功");
+        //                alert(json.msg);
+        //                window.location.href = "javascript:history.back(-1)";
+        //                //window.location.href = "choose1.html";
 
-                        //$("#divmessage").append("<span>退房成功！</span> <br>");
-                    }
-                    else {
-                        alert(json.msg);
-                        window.location.href = "javascript:history.back(-1)";
+        //                //$("#divmessage").append("<span>退房成功！</span> <br>");
+        //            }
+        //            else {
+        //                alert(json.msg);
+        //                window.location.href = "javascript:history.back(-1)";
 
-                        //window.location.href = "choose1.html";
+        //                //window.location.href = "choose1.html";
 
-                        //$("#divmessage").append("<span>退房失败！</span> <br>");
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert(XMLHttpRequest.msg);
+        //                //$("#divmessage").append("<span>退房失败！</span> <br>");
+        //            }
+        //        },
+        //        error: function (XMLHttpRequest, textStatus, errorThrown) {
+        //            alert(XMLHttpRequest.msg);
 
-                },
-                timeout: 3000,
-            })
+        //        },
+        //        timeout: 3000,
+        //    })
 
-        }
-
+        //}
     </script>
 </head>
 <body>
@@ -267,12 +320,12 @@
             </button>
             <a class="navbar-brand">时代地产</a>
         </div>
-        <div class="collapse navbar-collapse" id="example-navbar-collapse" style="height: 70px; font-size: 24px;float:right">
+        <div class="collapse navbar-collapse" id="example-navbar-collapse" style="height: 70px; font-size: 24px; float: right">
             <ul class="nav navbar-nav">
-               
-               
+
+
                 <li class="active"><a href="roomnei_neikong.html">内控表</a></li>
-                
+
                 <li style="font-size: 16px"><a id="currentProj"></a></li>
             </ul>
         </div>
@@ -322,17 +375,40 @@
             <h1>成交总价：<span data-bind="text: format(RoomTotal)"></span>元</h1>
             <h1>成交单价：<span data-bind="text: format(BldCjPrice)"></span>元</h1>
             <!-- <h1>面价：<span data-bind="text: format(Total)"></span>元</h1>-->
-
-            <button onclick="take()" class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
+            <!--<button data-bind="text: confirm" onclick="take(001)"></button>-->
+            <!--//待售：0；预留：1；销控：2；认购：3-->
+           
+        </div>
+    </section>
+    <div style="margin-left: 0; margin-top: 10px; text-align: center" >
+     <button onclick="take(02)" name="0" id="02" class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
+                待售转销控
+            </button>
+            <button onclick="take(01)" name="0" id="01" class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
+                待售转预留
+            </button>
+            <button onclick="take(10)" name="1" id="10" class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
+                预留转待售
+            </button>
+            <button onclick="take(12)" name="1" id="12" class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
+                预留转销控
+            </button>
+            <button onclick="take(13)" name="1" id="13" class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
+                预留转认购
+            </button>
+            <button onclick="take(20)"  name="2" id="20" class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
+                销控转待售
+            </button>
+            <button onclick="take(21)"  name="2" id="21" class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
+                销控转预留
+            </button>
+            <button onclick="take(7)" name="7" id="7" class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
                 确定
             </button>
             <button onclick="javascript:history.back(-1); " class="btn btn-primary btn-large" style="width: 150px; margin-top: 20px">
                 返回上一页
             </button>
         </div>
-    </section>
-
-
 </body>
 
 
