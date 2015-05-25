@@ -138,25 +138,25 @@
         function take(num) {
             switch (num) {
                 case 01:
-                    turn(dai_z_yu);//待售转预留
+                    changestatus('预留');//待售转预留
                     break;
                 case 02:
-                    turn(dai_z_xiao);//待售转销控
+                    changestatus('销控');//待售转销控
                     break;
                 case 10:
-                    turn(yu_z_dai);//预留转待售
+                    changestatus('待售');//预留转待售
                     break;
                 case 12:
-                    turn(yu_z_xiao);//预留转销控
+                    changestatus('销控');//预留转销控
                     break;
                 case 13:
                     takecode();//预留转认购
                     break;
                 case 20:
-                    turn(xiao_z_dai);//销控转待售
+                    changestatus('待售');//销控转待售
                     break;
                 case 21:
-                    turn(xiao_z_yu);//销控转预留
+                    changestatus('预留');//销控转预留
                     break;
                 case 7:
                     outdate();//选房过期未交款
@@ -167,8 +167,8 @@
         }
 
         
-        function turn(param) {
-            var testdata = { info: { token: token }, func: param, params: { 'ProjGUID': projguid, 'BldGUID': buildingid, 'RoomGUID': roomid, 'Status': status } };
+        function changestatus(param) {
+            var testdata = { info: { token: token }, func: 'changestatus', params: { 'ProjGUID': projguid, 'BldGUID': buildingid, 'RoomGUID': roomid, 'Status': status, 'New': param } };
             $.ajax({
                 url: url,
                 dataType: 'jsonp',
