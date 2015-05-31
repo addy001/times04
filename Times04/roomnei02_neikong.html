@@ -70,13 +70,13 @@
                 success: function (json) {
                     if (json.result) {
                         for (var i in json.data) {
-                            if (roomid == json.data[i].RoomGUID) {
-
+                            if (roomid == json.data[i].RoomGUID) {                                
                                 if (json.data[i].Status == "预约" || json.data[i].Status == "预留") {
                                     json.data[i].confirm = "预留>>认购、销控、待售"
                                     $("button[name=0]").attr({ style: "display:none" });
                                     $("button[name=2]").attr({ style: "display:none" });
                                     $("#7").attr({ style: "display:none" });
+                                    status = json.data[i].Status;
                                     choose = 0;
                                 }
                                 else if (json.data[i].Status == "销控") {
@@ -84,7 +84,7 @@
                                     $("button[name=0]").attr({ style: "display:none" });
                                     $("button[name=1]").attr({ style: "display:none" });
                                     $("#7").attr({ style: "display:none" });
-                                    status = "销控";
+                                    status = json.data[i].Status;
                                     choose = 3;
                                 }
                                 else if (json.data[i].Status == "待售") {
@@ -92,7 +92,7 @@
                                     $("button[name=1]").attr({ style: "display:none" });
                                     $("button[name=2]").attr({ style: "display:none" });
                                     $("#7").attr({ style: "display:none" });
-                                    status = "待售";
+                                    status = json.data[i].Status;
                                     choose = 4;
                                 }
                                 else if (json.data[i].Status == "超时") {

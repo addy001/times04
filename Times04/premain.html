@@ -46,7 +46,7 @@
                             localStorage.setItem("projectnum", h);
                         }
 
-                        if (h == 1) {                     
+                        if (h == 1) {
                             projectname = json.data[0].projname;//获取Select选择的Text
                             projectguid = json.data[0].projguid;//获取Select选择的Value
                             localStorage.setItem("projectname", projectname);
@@ -68,16 +68,16 @@
                                         for (var i in json.right) {
                                             modules.push(json.right[i]);
                                             localStorage.setItem("modules", modules);
-                                          
+
                                         }
                                         localStorage.setItem("right", modules.length);//   /验证单一权限
-                                        
+
                                         if (modules.length < 1) {
                                             alert("无权限");
                                             window.location.href = "start.html";
                                         }
-                                        else if (modules.length == 1) {                                                                              
-                                           
+                                        else if (modules.length == 1) {
+
                                             if (($.inArray("1", modules) != -1)) {
                                                 location.href = "qiandao.html";//签到组  一个页面
                                             }
@@ -98,11 +98,13 @@
                                             }
                                             else if (($.inArray("7", modules) != -1)) {
                                                 location.href = "room.html";//退房组
+                                            } else if (($.inArray("8", modules) != -1)) {
+                                                location.href = "confirm.html";//退房组
                                             }
                                         }
                                         else if (modules.length > 1) {
                                             location.href = "right.html";//多权限功能选择页面
-                                        }                                      
+                                        }
 
                                     }
                                     else {
@@ -159,7 +161,7 @@
                         for (var i in json.right) {
                             modules.push(json.right[i]);
                             localStorage.setItem("modules", modules);
-                          
+
                         }
                         localStorage.setItem("right", modules.length);//   /验证单一权限
                         if (modules.length < 1) {
@@ -188,10 +190,13 @@
                             else if (($.inArray("7", modules) != -1)) {
                                 location.href = "room.html";//退房组
                             }
+                            else if (($.inArray("8", modules) != -1)) {
+                                location.href = "confirm.html";//签约确认组
+                            }
                         }
                         else if (modules.length > 1) {
                             location.href = "right.html";//多权限功能选择页面
-                        }                      
+                        }
 
                     }
                     else {

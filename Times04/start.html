@@ -73,6 +73,7 @@
                 success: function (jsons) {                    //alert(jsons.data.user.Token)                
                     if (jsons.result) {
                         localStorage.setItem("token", jsons.data.user.Token);
+                        localStorage.setItem("usercode", account);
 
                         location.href = "premain.html";
                     }
