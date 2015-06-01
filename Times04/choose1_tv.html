@@ -443,11 +443,12 @@
                         if (json.data[i].Status == "待售") {
                             json.data[i].color = '';
                             json.data[i].xcolor = '#ffffff';
+                            //json.data[i].RoomTotal="aa"//控制待售显示内容
                         }
                         else if (json.data[i].Status == "销控") {
                             json.data[i].color = '#A1A1A1';
                             json.data[i].xcolor = '#A1A1A1';//灰色
-                            //json.data[i].RoomTotal = "***";
+                            //json.data[i].RoomTotal = "灰色";//控制销控显示内容
                         }
                         else {
                             json.data[i].color = '#FF3300';

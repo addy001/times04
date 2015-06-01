@@ -1,0 +1,10 @@
+﻿外控表显示修改：
+修改地方choose1_tv.html、tv.css
+宽度：修改tv.css中miniwid的值同时修改choose1_tv.html中miniwid的值（465行）；
+其他的在tv.css里面修改
+
+
+外控表待售、销控显示：
+默认显示房号或者总价；
+若修改，调整json.data[i].RoomTotal的值，见choose1_tv.html
+ 446行和451行

@@ -64,7 +64,7 @@
             $("#currentProj").html("当前项目：" + projectname);
         })
 
-        var zhongqiandata;
+        var confirmdata;
         //二维码
         function takecode() {
             JSBridge.takecode(function (codeInfo, isSuccess) {
@@ -86,7 +86,7 @@
             $.ajax({
                 url: url,
                 dataType: 'jsonp',
-                data: zhongqiandata,
+                data: confirmdata,
                 //jsonp: 'callbackparam',
                 jsonpCallback: "callback",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
                 success: function (json) {
@@ -164,7 +164,7 @@
             <div class="row" style="text-align: center">
                 <div class="col-sm-12 col-md-12 col-lg-12">
                     <a onclick="takecode()">
-                        <img src="images/05.png" style="border-radius: 25px"
+                        <img src="images/06.png" style="border-radius: 25px"
                             alt="通用的占位符缩略图">
                     </a>
                 </div>
