@@ -419,9 +419,12 @@
                 cache: false,
                 //jsonp: 'callbackparam',
                 jsonpCallback: "callback",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
-                success: function (json) {
-
-                 
+                error: function (json) {
+                    if (!json.result) {
+                        getData(url, callback);
+                    }
+                },
+                success: function (json) {                 
                     for (var i in json.data) {
                         json.data[i].width = 100;
                         if (json.data[i].Status == "待售") {
@@ -506,8 +509,10 @@
                     };
                     if (callback) {
                         callback(json.data);
+                    };
+                    if (json.result) {
+                        harvest();
                     }
-
 
                 }
             });
@@ -601,7 +606,28 @@
 
 
         //每5秒执行get()函数;
-        setInterval(function () {
+        //setInterval(function () {
+        //    var timestamp = Date.parse(new Date());
+        //    var url = localStorage.getItem("url");
+        //    url = url + "?time=" + timestamp;
+        //    var mydate = new Date();
+        //    $("#time").text(mydate.toLocaleTimeString());
+
+        //    getData(url, function (res) {
+        //        var koArr001 = parseBizData(res);
+        //        //vm.floorlists([]);//清空数据
+        //        vm.floorlists.length = 0;
+
+        //        //$("#Price").css("display", "none");
+        //        //$("#RoomNum").css("display", "block");
+
+        //        vm.floorlists(koArr001);
+        //    });
+
+        //}, refreshtime);
+
+
+        function harvest() {
             var timestamp = Date.parse(new Date());
             var url = localStorage.getItem("url");
             url = url + "?time=" + timestamp;
@@ -613,16 +639,12 @@
                 //vm.floorlists([]);//清空数据
                 vm.floorlists.length = 0;
 
-                //$("#Price").css("display", "none");
-                //$("#RoomNum").css("display", "block");
+                $("#Price").css("display", "none");
+                $("#RoomNum").css("display", "block");
 
                 vm.floorlists(koArr001);
             });
-
-        }, refreshtime);
-
-
-
+        }
      
     </script>
 </head>

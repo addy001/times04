@@ -437,6 +437,11 @@
                 cache: false,
                 //jsonp: 'callbackparam',
                 jsonpCallback: "callback",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名
+                error: function (json) {
+                    if (!json.result) {
+                        getData(url, callback);
+                    }
+                },
                 success: function (json) {
                     for (var i in json.data) {
                         json.data[i].width = 100;
@@ -465,31 +470,15 @@
                         //修改div的宽度
                         miniwid = 120;//对应miniwid的值
                         var wid = (roomnumber + 2) * miniwid + 5;
-                        $("#room").width(wid);
-
-                        //$("#one-roomno").width(spanwidth);
-                        //$("#one-roomno").height(spanheight);
-
-                        //$("#one-bldarea").width(spanwidth);
-                        //$("#one-bldarea").height(spanheight);
-
-                        //$("#one-tnarea").width(spanwidth);
-                        //$("#one-tnarea").height(spanheight);
-
-                        //$("#one-room").width(spanwidth);
-                        //$("#one-room").height(spanheight);
-
-                        //$("#one-roomno").attr({ style: "height:" + spanheight + "px;width:" + spanwidth + "px" });
-                        //$("#one-bldarea").attr({ style: "height:" + spanheight + "px;width:" + spanwidth + "px" });
-                        //$("#one-tnarea").attr({ style: "height:" + spanheight + "px;width:" + spanwidth + "px" });
-                        //$("#one-room").attr({ style: "height:" + spanheight + "px;width:" + spanwidth + "px" });
-
+                        $("#room").width(wid);                      
 
                     };
                     if (callback) {
                         callback(json.data);
                     }
-
+                    if (json.result) {
+                        harvest();
+                    }
 
                 }
             });
@@ -531,8 +520,8 @@
                 n = '*';
             }
         }
-        //每5秒执行get()函数;
-        setInterval(function () {
+
+        function harvest() {
             var timestamp = Date.parse(new Date());
             var url = localStorage.getItem("url");
             url = url + "?time=" + timestamp;
@@ -548,8 +537,29 @@
                 $("#RoomNum").css("display", "block");
 
                 vm.floorlists(koArr001);
-            });
-        }, refreshtime);
+            });        
+        }
+
+
+        //每5秒执行get()函数;
+        //setInterval(function () {
+        //    var timestamp = Date.parse(new Date());
+        //    var url = localStorage.getItem("url");
+        //    url = url + "?time=" + timestamp;
+        //    var mydate = new Date();
+        //    $("#time").text(mydate.toLocaleTimeString());
+
+        //    getData(url, function (res) {
+        //        var koArr001 = parseBizData(res);
+        //        //vm.floorlists([]);//清空数据
+        //        vm.floorlists.length = 0;
+
+        //        $("#Price").css("display", "none");
+        //        $("#RoomNum").css("display", "block");
+
+        //        vm.floorlists(koArr001);
+        //    });
+        //}, refreshtime);
 
         //全屏
         function expand() {
