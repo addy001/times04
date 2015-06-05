@@ -132,38 +132,33 @@
         </div>
         <div class="collapse navbar-collapse" id="example-navbar-collapse" style="height: 70px; font-size: 24px; float: right">
             <ul class="nav navbar-nav">
-                 <li id="right"><a href="right.html">首页</a></li>
-            
+                <li id="right"><a href="right.html">首页</a></li>
+
                 <li id="project"><a href="premain.html">项目</a></li>
-                 <li><a onclick="javascript:location.replace(location.href);">刷新</a></li>
-             
+                <li><a onclick="javascript:location.replace(location.href);">刷新</a></li>
                 <li><a href="start.html">退出</a></li>
+
                 <li style="font-size: 16px"><a id="currentProj"></a></li>
             </ul>
         </div>
     </nav>
 
-
-
     <div style="padding-top: 70px">
-
         <div data-bind="foreach: report" style="margin: 0 auto; border: 0px; font-size: 22px; line-height: 200%; text-align: center;">
-            <div>
+            <div style="margin: 10px 0 10px 0">
                 <table>
                     <tbody>
                         <tr>
                             <th>认筹人数:</th>
                             <td><span data-bind="text: renchou"></span></td>
-                        </tr>
-                        <tr>
+
                             <th>签到人数:</th>
                             <td><span data-bind="text: qiandao"></span></td>
                         </tr>
                         <tr>
                             <th>认筹未签到人数:</th>
                             <td><span data-bind="text: renchou - qiandao" style="color: red"></span></td>
-                        </tr>
-                        <tr>
+
                             <th>开盘签到率(%):</th>
                             <td><span data-bind="text: ((qiandao / renchou) * 100).toFixed(1)"></span></td>
                         </tr>
@@ -171,29 +166,28 @@
                     </tbody>
                 </table>
             </div>
-            <div>
+
+            <div style="margin: 10px 0 10px 0">
                 <table>
                     <tbody>
                         <tr>
                             <th>中签确认人数:</th>
                             <td><span data-bind="text: zhongqian"></span></td>
-                        </tr>
 
-                        <tr>
                             <th>等待叫号人数:</th>
                             <td><span data-bind="text: qiandao - zhongqian"></span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div>
+
+            <div style="margin: 10px 0 10px 0">
                 <table>
                     <tbody>
                         <tr>
                             <th>已选房套数:</th>
                             <td><span data-bind="text: xuanfang"></span></td>
-                        </tr>
-                        <tr>
+
                             <th>已交款套数:</th>
                             <td><span data-bind="text: jiaokuan"></span></td>
                         </tr>
@@ -205,15 +199,14 @@
                 </table>
 
             </div>
-            <div>
+
+            <div style="margin: 10px 0 10px 0">
                 <table>
                     <tbody>
                         <tr>
                             <th>已打认购书数:</th>
                             <td><span data-bind="text: rgs"></span></td>
-                        </tr>
 
-                        <tr>
                             <th>交款未签约:</th>
                             <td><span data-bind="text: jiaokuan - rgs" style="color: red"></span></td>
                         </tr>
@@ -221,27 +214,28 @@
                 </table>
             </div>
 
-            <div>
+            <div style="margin: 10px 0 10px 0">
                 <table>
                     <tbody>
                         <tr>
                             <th>推盘总套数:</th>
                             <td><span data-bind="text: roomtotal"></span></td>
-                        </tr>
 
-                        <tr>
                             <th>已成交套数:</th>
                             <td><span data-bind="text: salenum"></span></td>
                         </tr>
+
                         <tr>
+                            <th>签约确认数:</th>
+                            <td><span data-bind="text: qianyue"></span></td>
+
                             <th>已成交金额(元):</th>
                             <td><span data-bind="text: format(salemoney)"></span></td>
                         </tr>
                         <tr>
                             <th>成交总面积(㎡):</th>
                             <td><span data-bind="text: (parseFloat(salearea)).toFixed(1)"></span></td>
-                        </tr>
-                        <tr>
+
                             <th>均价(元/㎡):</th>
                             <td><span data-bind="text: (salemoney / salearea).toFixed(1)"></span></td>
                         </tr>
@@ -251,28 +245,19 @@
                             <th>解筹率(%):</th>
                             <td><span data-bind="text: ((xuanfang / renchou) * 100).toFixed(1)"></span></td>
 
-                        </tr>
-                        <tr>
+
                             <th>开盘认购率(%):</th>
                             <td><span data-bind="text: ((salenum / roomtotal) * 100).toFixed(1)"></span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
-
+           
+            <button class="btn btn-primary btn-large" style="width: 150px;margin-top:20px;"onclick="javascript:window.location.href='right.html'">返回首页</button>
+          
 
         </div>
     </div>
-
-
-
-
-
-
-
-
-
 
 </body>
 </html>
