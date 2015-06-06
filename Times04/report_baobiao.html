@@ -37,6 +37,14 @@
             width: 250px;
             padding-left: 50px;
         }
+        /*h5 {
+            text-align:left
+               
+        }
+        #h5 {
+            padding-left:60px;
+        }*/
+
     </style>
     <script type="text/javascript">
         var url = localStorage.getItem("url");
@@ -143,9 +151,10 @@
         </div>
     </nav>
 
-    <div style="padding-top: 70px">
+    <div style="padding-top: 80px">
         <div data-bind="foreach: report" style="margin: 0 auto; border: 0px; font-size: 22px; line-height: 200%; text-align: center;">
-            <div style="margin: 10px 0 10px 0">
+            <div style="margin: 40px 0 20px 0">
+             <!--   <div id="h5"><h5>认筹签到</h5></div>-->
                 <table>
                     <tbody>
                         <tr>
@@ -167,7 +176,7 @@
                 </table>
             </div>
 
-            <div style="margin: 10px 0 10px 0">
+            <div style="margin: 15px 0 20px 0">
                 <table>
                     <tbody>
                         <tr>
@@ -181,7 +190,7 @@
                 </table>
             </div>
 
-            <div style="margin: 10px 0 10px 0">
+            <div style="margin: 15px 0 20px 0">
                 <table>
                     <tbody>
                         <tr>
@@ -200,7 +209,7 @@
 
             </div>
 
-            <div style="margin: 10px 0 10px 0">
+            <div style="margin: 15px 0 20px 0">
                 <table>
                     <tbody>
                         <tr>
@@ -214,48 +223,52 @@
                 </table>
             </div>
 
-            <div style="margin: 10px 0 10px 0">
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>推盘总套数:</th>
-                            <td><span data-bind="text: roomtotal"></span></td>
 
-                            <th>已成交套数:</th>
-                            <td><span data-bind="text: salenum"></span></td>
-                        </tr>
+            <div style="margin: 15px 2px 20px 2px">
+                <!--<fieldset style="margin: 15px 2px 20px 2px">
+                    <legend style="text-align:left;padding-left:80px">项目信息</legend>-->
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>推盘总套数:</th>
+                                <td><span data-bind="text: roomtotal"></span></td>
 
-                        <tr>
-                            <th>签约确认数:</th>
-                            <td><span data-bind="text: qianyue"></span></td>
+                                <th>已成交套数:</th>
+                                <td><span data-bind="text: salenum"></span></td>
+                            </tr>
 
-                            <th>已成交金额(元):</th>
-                            <td><span data-bind="text: format(salemoney)"></span></td>
-                        </tr>
-                        <tr>
-                            <th>成交总面积(㎡):</th>
-                            <td><span data-bind="text: (parseFloat(salearea)).toFixed(1)"></span></td>
+                            <tr>
+                                <th>签约确认数:</th>
+                                <td><span data-bind="text: qianyue"></span></td>
 
-                            <th>均价(元/㎡):</th>
-                            <td><span data-bind="text: (salemoney / salearea).toFixed(1)"></span></td>
-                        </tr>
+                                <th>已成交金额(元):</th>
+                                <td><span data-bind="text: format(salemoney)"></span></td>
+                            </tr>
+                            <tr>
+                                <th>成交总面积(㎡):</th>
+                                <td><span data-bind="text: (parseFloat(salearea)).toFixed(1)"></span></td>
+
+                                <th>均价(元/㎡):</th>
+                                <td><span data-bind="text: (salemoney / salearea).toFixed(1)"></span></td>
+                            </tr>
+
+                            <tr>
+                                <th>解筹率(%):</th>
+                                <td><span data-bind="text: ((xuanfang / renchou) * 100).toFixed(1)"></span></td>
 
 
-                        <tr>
-                            <th>解筹率(%):</th>
-                            <td><span data-bind="text: ((xuanfang / renchou) * 100).toFixed(1)"></span></td>
+                                <th>开盘认购率(%):</th>
+                                <td><span data-bind="text: ((salenum / roomtotal) * 100).toFixed(1)"></span></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                <!--</fieldset>-->
+
+                <button class="btn btn-primary btn-large" style="width: 150px; margin-top: 50px;" onclick="javascript:window.location.href='right.html'">返回首页</button>
 
 
-                            <th>开盘认购率(%):</th>
-                            <td><span data-bind="text: ((salenum / roomtotal) * 100).toFixed(1)"></span></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
-           
-            <button class="btn btn-primary btn-large" style="width: 150px;margin-top:20px;"onclick="javascript:window.location.href='right.html'">返回首页</button>
-          
-
         </div>
     </div>
 
